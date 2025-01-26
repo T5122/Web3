@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web3 Wallet</title>
+  <!-- Link to the CSS file -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Web3 Wallet</h1>
+    <p>Manage your crypto assets securely.</p>
+  </header>
+  
+    <main>
+    <button id="connect-wallet">Connect Wallet</button>
+    <div id="wallet-info" style="display: none;">
+      <p><strong>Wallet Address:</strong> <span id="wallet-address"></span></p>
+      <p><strong>Balance:</strong> <span id="wallet-balance"></span></p>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Web3 Wallet</p>
+  </footer>
+
+  <!-- Link to the JavaScript file -->
+  <script src="script.js"></script>
+</body>
+</html><ALOASK-SEPARATE-EDITORS>/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f6f8;
+  text-align: center;
+  color: #333;
+}
+
+header {
+  background-color: #2d8a34;
+  color: white;
+  padding: 20px 0;
+}
+
+header h1 {
+  margin: 0;
+}
+
+main {
+  margin: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+<ALOASK-SEPARATE-EDITORS>
+// Script for Web3 Wallet functionality
+
+document.getElementById("connect-wallet").addEventListener("click", async () => {
+  // Check if the browser supports Ethereum (MetaMask)
+  if (typeof window.ethereum !== "undefined") {
+    try {
+      // Request account access
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+
+      // Get the first account
+      const walletAddress = accounts[0];
+      
+document.getElementById("wallet-address").textContent = walletAddress;
+
+      // Optionally, fetch balance
+      const balance = await window.ethereum.request({
+        method: "eth_getBalance",
+        params: [walletAddress, "latest"]
+      });
+
+      // Convert balance from Wei to Ether
+      const etherBalance = parseFloat(window.web3.utils.fromWei(balance, "ether"));
+      document.getElementById("wallet-balance").textContent = `${etherBalance} ETH`;
+
+      // Display wallet info
+      document.getElementById("wallet-info").style.display = "block";
+
+    } catch (error) {
+      console.error("User rejected the request:", error);
+    }
+  } else {
+    alert("MetaMask is not installed. Please install it to use the Web3 Wallet.");
+  }
+});
